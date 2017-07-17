@@ -1,4 +1,4 @@
-package transaction
+package db
 
 import (
 	"database/sql"
