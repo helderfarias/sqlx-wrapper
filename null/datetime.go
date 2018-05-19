@@ -46,7 +46,7 @@ func (n DateTime) Value() (driver.Value, error) {
 
 func (n DateTime) MarshalJSON() ([]byte, error) {
 	if !n.Valid {
-		return []byte("null"), nil
+		return []byte(""), nil
 	}
 
 	t := n.DateTime

@@ -81,7 +81,7 @@ func (i *Int) UnmarshalText(text []byte) error {
 // It will encode null if this Int is null.
 func (i Int) MarshalJSON() ([]byte, error) {
 	if !i.Valid {
-		return []byte("null"), nil
+		return []byte(""), nil
 	}
 	return []byte(strconv.FormatInt(i.Int64, 10)), nil
 }
