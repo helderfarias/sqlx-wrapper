@@ -86,7 +86,7 @@ func (b *Bool) UnmarshalText(text []byte) error {
 // It will encode null if this Bool is null.
 func (b Bool) MarshalJSON() ([]byte, error) {
 	if !b.Valid {
-		return []byte(""), nil
+		return []byte("null"), nil
 	}
 	if !b.Bool {
 		return []byte("false"), nil

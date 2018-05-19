@@ -65,7 +65,7 @@ func (s *String) UnmarshalJSON(data []byte) error {
 // It will encode null if this String is null.
 func (s String) MarshalJSON() ([]byte, error) {
 	if !s.Valid {
-		return []byte(""), nil
+		return []byte("null"), nil
 	}
 	return json.Marshal(s.String)
 }
