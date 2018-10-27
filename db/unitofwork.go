@@ -3,6 +3,7 @@ package db
 import (
 	"database/sql"
 	"errors"
+	"log"
 
 	"github.com/jmoiron/sqlx"
 )
@@ -22,6 +23,10 @@ type UnitOfWork interface {
 	Get(dest interface{}, query string, args ...interface{}) error
 
 	InTransaction(contextOver func(db UnitOfWork) (interface{}, error)) (interface{}, error)
+
+	Commit() error
+
+	Rollback() error
 }
 
 type unitOfWork struct {
@@ -39,7 +44,7 @@ func (u *unitOfWork) InTransaction(contextOver func(db UnitOfWork) (interface{},
 
 	defer func() {
 		if r := recover(); r != nil {
-			u.rollback()
+			log.Println(u.Rollback())
 			panic(r)
 		}
 	}()
@@ -47,9 +52,9 @@ func (u *unitOfWork) InTransaction(contextOver func(db UnitOfWork) (interface{},
 	result, err := contextOver(u)
 
 	if err == nil {
-		u.commit()
+		log.Println(u.Commit())
 	} else {
-		u.rollback()
+		log.Println(u.Rollback())
 	}
 
 	return result, err
@@ -121,28 +126,32 @@ func (u *unitOfWork) begin() {
 	}
 }
 
-func (u *unitOfWork) commit() {
+func (u *unitOfWork) Commit() error {
 	if u.tx == nil {
 		panic(errors.New("Nenhuma transação foi iniciada."))
 	}
 
 	err := u.tx.Commit()
 	if err != nil {
-		panic(err)
+		u.tx = nil
+		return err
 	}
 
 	u.tx = nil
+	return nil
 }
 
-func (u *unitOfWork) rollback() {
+func (u *unitOfWork) Rollback() error {
 	if u.tx == nil {
 		panic(errors.New("Nenhuma transação foi iniciada."))
 	}
 
 	err := u.tx.Rollback()
 	if err != nil {
-		panic(err)
+		u.tx = nil
+		return err
 	}
 
 	u.tx = nil
+	return nil
 }
