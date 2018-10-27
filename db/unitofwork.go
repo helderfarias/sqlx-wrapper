@@ -21,7 +21,7 @@ type UnitOfWork interface {
 
 	Get(dest interface{}, query string, args ...interface{}) error
 
-	InTransaction(contextOver func(db UnitOfWork) error)
+	InTransaction(contextOver func(db UnitOfWork) (interface{}, error)) (interface{}, error)
 }
 
 type unitOfWork struct {
@@ -34,7 +34,7 @@ func NewUnitOfWork(db *sqlx.DB, tx *sqlx.Tx) UnitOfWork {
 	return &unitOfWork{db: db, tx: tx}
 }
 
-func (u *unitOfWork) InTransaction(contextOver func(db UnitOfWork) error) {
+func (u *unitOfWork) InTransaction(contextOver func(db UnitOfWork) (interface{}, error)) (interface{}, error) {
 	u.begin()
 
 	defer func() {
@@ -44,13 +44,15 @@ func (u *unitOfWork) InTransaction(contextOver func(db UnitOfWork) error) {
 		}
 	}()
 
-	err := contextOver(u)
+	result, err := contextOver(u)
 
 	if err == nil {
 		u.commit()
 	} else {
 		u.rollback()
 	}
+
+	return result, err
 }
 
 func (u *unitOfWork) MustNamedExec(query string, arg interface{}) sql.Result {

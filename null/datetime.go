@@ -66,6 +66,11 @@ func (n *DateTime) UnmarshalJSON(data []byte) (err error) {
 		Valid    bool
 	}
 
+	if string(data) == "" || string(data) == "null" {
+		n.Valid = false
+		return nil
+	}
+
 	var decode dateDecode
 	err = json.Unmarshal(data, &decode.DateTime)
 

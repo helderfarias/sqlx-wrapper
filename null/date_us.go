@@ -58,7 +58,7 @@ func (n *DateUS) UnmarshalJSON(data []byte) (err error) {
 		Valid bool
 	}
 
-	if string(data) == "null" {
+	if string(data) == "" || string(data) == "null" {
 		n.Date = time.Time{}
 		n.Valid = false
 		err = nil
