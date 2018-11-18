@@ -8,6 +8,16 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestParseDateTimeString(t *testing.T) {
+	data1 := DateTimeFrom("17/04/2015 08:10:10")
+	data2 := NewDateTime(time.Date(2015, time.April, 17, 8, 10, 10, 0, time.UTC))
+	data3 := DateTimeFrom("")
+
+	assert.Equal(t, "17/04/2015 08:10:10", data1.String())
+	assert.Equal(t, "17/04/2015 08:10:10", data2.String())
+	assert.Empty(t, data3.String())
+}
+
 func TestCriarDateTimeFrom(t *testing.T) {
 	data1 := DateTimeFrom("17/04/2015 08:10:10")
 	data2 := NewDateTime(time.Date(2015, time.April, 17, 8, 10, 10, 0, time.UTC))

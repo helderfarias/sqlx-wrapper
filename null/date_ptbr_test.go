@@ -8,6 +8,16 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestParseDateString(t *testing.T) {
+	data1 := DateFrom("17/01/2015")
+	data2 := NewDate(time.Date(2015, time.January, 17, 0, 0, 0, 0, time.UTC))
+	data3 := DateFrom("")
+
+	assert.Equal(t, "17/01/2015", data1.String())
+	assert.Equal(t, "17/01/2015", data2.String())
+	assert.Empty(t, data3.String())
+}
+
 func TestCriarDateFrom(t *testing.T) {
 	data1 := DateFrom("17/01/2015")
 	data2 := NewDate(time.Date(2015, time.January, 17, 0, 0, 0, 0, time.UTC))

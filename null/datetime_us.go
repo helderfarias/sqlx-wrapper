@@ -133,3 +133,12 @@ func (d *DateTimeUS) Before(that *DateTimeUS) bool {
 func (d *DateTimeUS) After(that *DateTimeUS) bool {
 	return d.DateTimeUS.After(that.DateTimeUS)
 }
+
+func (d *DateTimeUS) String() string {
+	bytes, err := d.MarshalText()
+	if err != nil {
+		return ""
+	}
+
+	return string(bytes)
+}

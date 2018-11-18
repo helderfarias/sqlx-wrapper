@@ -125,3 +125,12 @@ func (d *Date) Before(that *Date) bool {
 func (d *Date) After(that *Date) bool {
 	return d.Date.After(that.Date)
 }
+
+func (d *Date) String() string {
+	bytes, err := d.MarshalText()
+	if err != nil {
+		return ""
+	}
+
+	return string(bytes)
+}
