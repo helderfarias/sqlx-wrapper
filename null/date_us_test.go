@@ -8,6 +8,24 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestCriarDateUSFrom(t *testing.T) {
+	data1 := DateUSFrom("2015-01-17")
+	data2 := NewDateUS(time.Date(2015, time.January, 17, 0, 0, 0, 0, time.UTC))
+
+	assert.NotNil(t, data1)
+	assert.Equal(t, data1, data2)
+	assert.True(t, data1.Valid)
+}
+
+func TestCriarDateUSFromInvalidaSeInputVazio(t *testing.T) {
+	data1 := DateUSFrom("")
+	data2 := NewDateUS(time.Date(2015, time.January, 17, 0, 0, 0, 0, time.UTC))
+
+	assert.NotNil(t, data1)
+	assert.NotEqual(t, data1, data2)
+	assert.False(t, data1.Valid)
+}
+
 func TestCriarDateUSNulo(t *testing.T) {
 	data := DateUS{}
 
@@ -73,8 +91,8 @@ func TestConverterJsonParaDateUSNull(t *testing.T) {
 }
 
 func TestCompararDateUS(t *testing.T) {
-	data1 := NewDate(time.Date(2015, time.April, 17, 0, 0, 0, 0, time.UTC))
-	data2 := NewDate(time.Date(2015, time.April, 17, 0, 0, 0, 0, time.UTC))
+	data1 := NewDateUS(time.Date(2015, time.April, 17, 0, 0, 0, 0, time.UTC))
+	data2 := NewDateUS(time.Date(2015, time.April, 17, 0, 0, 0, 0, time.UTC))
 
 	assert.True(t, data1.Equal(&data2))
 }

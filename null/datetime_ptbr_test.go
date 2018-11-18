@@ -2,10 +2,29 @@ package null
 
 import (
 	"encoding/json"
-	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
+
+func TestCriarDateTimeFrom(t *testing.T) {
+	data1 := DateTimeFrom("17/04/2015 08:10:10")
+	data2 := NewDateTime(time.Date(2015, time.April, 17, 8, 10, 10, 0, time.UTC))
+
+	assert.NotNil(t, data1)
+	assert.Equal(t, data1, data2)
+	assert.True(t, data1.Valid)
+}
+
+func TestCriarDateTimeFromInvalidaSeInputVazio(t *testing.T) {
+	data1 := DateUSFrom("")
+	data2 := NewDateUS(time.Date(2015, time.January, 17, 0, 0, 0, 0, time.UTC))
+
+	assert.NotNil(t, data1)
+	assert.NotEqual(t, data1, data2)
+	assert.False(t, data1.Valid)
+}
 
 func TestCriarDateTimeNulo(t *testing.T) {
 	data := DateTime{}

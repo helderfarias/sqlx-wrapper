@@ -17,6 +17,15 @@ type Date struct {
 	Valid bool
 }
 
+func DateFrom(src string) Date {
+	date, err := time.Parse(DDMMYYYY, src)
+	if err != nil {
+		return Date{Date: time.Now(), Valid: false}
+	}
+
+	return NewDate(date)
+}
+
 func NewDate(date time.Time) Date {
 	return Date{
 		Date:  time.Date(date.Year(), date.Month(), date.Day(), 0, 0, 0, 0, time.UTC),

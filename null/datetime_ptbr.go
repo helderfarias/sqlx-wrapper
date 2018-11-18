@@ -17,6 +17,15 @@ type DateTime struct {
 	Valid    bool
 }
 
+func DateTimeFrom(src string) DateTime {
+	dateTime, err := time.Parse(DDMMYYYYHHMMSS, src)
+	if err != nil {
+		return DateTime{DateTime: time.Now(), Valid: false}
+	}
+
+	return NewDateTime(dateTime)
+}
+
 func NewDateTime(datetime time.Time) DateTime {
 	return DateTime{
 		DateTime: time.Date(

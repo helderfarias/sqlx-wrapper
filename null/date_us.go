@@ -17,6 +17,15 @@ type DateUS struct {
 	Valid bool
 }
 
+func DateUSFrom(src string) DateUS {
+	date, err := time.Parse(DDMMYYYY_US, src)
+	if err != nil {
+		return DateUS{Date: time.Now(), Valid: false}
+	}
+
+	return NewDateUS(date)
+}
+
 func NewDateUS(date time.Time) DateUS {
 	return DateUS{
 		Date:  time.Date(date.Year(), date.Month(), date.Day(), 0, 0, 0, 0, time.UTC),
@@ -105,14 +114,14 @@ func (d DateUS) IsZero() bool {
 	return !d.Valid
 }
 
-func (d *DateUS) Equal(that *Date) bool {
+func (d *DateUS) Equal(that *DateUS) bool {
 	return d.Date.Equal(that.Date)
 }
 
-func (d *DateUS) Before(that *Date) bool {
+func (d *DateUS) Before(that *DateUS) bool {
 	return d.Date.Before(that.Date)
 }
 
-func (d *DateUS) After(that *Date) bool {
+func (d *DateUS) After(that *DateUS) bool {
 	return d.Date.After(that.Date)
 }
