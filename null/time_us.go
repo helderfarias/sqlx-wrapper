@@ -3,7 +3,6 @@ package null
 import (
 	"database/sql/driver"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"time"
 )
@@ -55,10 +54,6 @@ func (n Time) MarshalJSON() ([]byte, error) {
 	}
 
 	t := n.Date
-
-	if y := t.Year(); y < 0 || y >= 10000 {
-		return nil, errors.New("Date.MarshalJSON: year outside of range [0,9999]")
-	}
 
 	value := t.Format(TIME_FORMAT_HHMMSS)
 	bytes := []byte(fmt.Sprintf("\"%s\"", value))
