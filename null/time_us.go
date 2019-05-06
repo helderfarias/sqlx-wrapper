@@ -9,6 +9,7 @@ import (
 
 const (
 	TIME_FORMAT_HHMMSS = "15:04:05"
+	TIME_FORMAT_HHMM   = "15:04"
 )
 
 type Time struct {
@@ -17,7 +18,7 @@ type Time struct {
 }
 
 func TimeFrom(src string) Time {
-	date, err := time.Parse(TIME_FORMAT_HHMMSS, src)
+	date, err := parseTimeWithFallback(src)
 	if err != nil {
 		fallback := time.Now()
 		return Time{
@@ -76,7 +77,7 @@ func (n *Time) UnmarshalJSON(data []byte) (err error) {
 	var decode dateDecode
 	err = json.Unmarshal(data, &decode.Date)
 
-	n.Date, err = time.Parse(TIME_FORMAT_HHMMSS, string(decode.Date))
+	n.Date, err = parseTimeWithFallback(string(decode.Date))
 	n.Valid = decode.Valid
 	n.Valid = err == nil
 	return
@@ -90,7 +91,7 @@ func (n *Time) UnmarshalText(text []byte) error {
 	}
 
 	var err error
-	n.Date, err = time.Parse(TIME_FORMAT_HHMMSS, str)
+	n.Date, err = parseTimeWithFallback(str)
 	n.Valid = err == nil
 	return err
 }
@@ -122,4 +123,12 @@ func (d *Time) String() string {
 	}
 
 	return string(bytes)
+}
+
+func parseTimeWithFallback(src string) (time.Time, error) {
+	if date, err := time.Parse(TIME_FORMAT_HHMMSS, src); err == nil {
+		return date, nil
+	}
+
+	return time.Parse(TIME_FORMAT_HHMM, src)
 }

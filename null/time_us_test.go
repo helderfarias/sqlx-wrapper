@@ -12,10 +12,12 @@ func TestParseTimeString(t *testing.T) {
 	time1 := TimeFrom("12:56:22")
 	time2 := NewTime(time.Date(2015, time.January, 17, 10, 20, 05, 5, time.UTC))
 	time3 := TimeFrom("")
+	time4 := TimeFrom("12:56")
 
 	assert.Equal(t, "12:56:22", time1.String())
 	assert.Equal(t, "10:20:05", time2.String())
 	assert.Empty(t, time3.String())
+	assert.Equal(t, "12:56:00", time4.String())
 }
 
 func TestCriarTimeFrom(t *testing.T) {
@@ -82,10 +84,10 @@ func TestConverterJsonParaTime(t *testing.T) {
 	t1 := Time{}
 	t1.Scan(agora)
 
-	err := json.Unmarshal([]byte(`"10:10:10"`), &t1)
+	err := json.Unmarshal([]byte(`"10:10"`), &t1)
 
 	assert.Nil(t, err)
-	assert.Equal(t, "10:10:10", t1.String())
+	assert.Equal(t, "10:10:00", t1.String())
 }
 
 func TestConverterJsonParaTimeNull(t *testing.T) {
