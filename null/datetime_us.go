@@ -83,8 +83,6 @@ func (n *DateTimeUS) UnmarshalJSON(data []byte) (err error) {
 	var decode dateDecode
 	err = json.Unmarshal(data, &decode.DateTimeUS)
 
-	fmt.Println(decode.DateTimeUS)
-
 	n.DateTimeUS, err = time.Parse(DDMMYYYYHHMMSS_US, string(decode.DateTimeUS))
 	n.Valid = decode.Valid
 	n.Valid = err == nil
