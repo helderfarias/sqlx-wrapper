@@ -34,9 +34,22 @@ type unitOfWork struct {
 	tx *sqlx.Tx
 }
 
+type resultSet struct {
+	rowsAffected int64
+	err          error
+}
+
 //NewUnitOfWork factory method
 func NewUnitOfWork(db *sqlx.DB, tx *sqlx.Tx) UnitOfWork {
 	return &unitOfWork{db: db, tx: tx}
+}
+
+func (r *resultSet) LastInsertId() (int64, error) {
+	return r.rowsAffected, r.err
+}
+
+func (r *resultSet) RowsAffected() (int64, error) {
+	return r.rowsAffected, r.err
 }
 
 func (u *unitOfWork) InTransaction(contextOver func(db UnitOfWork) (interface{}, error)) (interface{}, error) {
@@ -64,7 +77,10 @@ func (u *unitOfWork) MustNamedExec(query string, arg interface{}) sql.Result {
 	if u.tx != nil {
 		res, err := u.tx.NamedExec(query, arg)
 		if err != nil {
-			panic(err)
+			return &resultSet{
+				rowsAffected: 0,
+				err:          err,
+			}
 		}
 
 		return res
@@ -72,7 +88,10 @@ func (u *unitOfWork) MustNamedExec(query string, arg interface{}) sql.Result {
 
 	res, err := u.db.NamedExec(query, arg)
 	if err != nil {
-		panic(err)
+		return &resultSet{
+			rowsAffected: 0,
+			err:          err,
+		}
 	}
 
 	return res
