@@ -22,7 +22,7 @@ func TimeFrom(src string) Time {
 	if err != nil {
 		fallback := time.Now()
 		return Time{
-			Date:  time.Date(0, 0, 0, fallback.Hour(), fallback.Minute(), fallback.Second(), fallback.Nanosecond(), time.UTC),
+			Date:  time.Date(0, 1, 1, fallback.Hour(), fallback.Minute(), fallback.Second(), fallback.Nanosecond(), time.UTC),
 			Valid: false,
 		}
 	}
@@ -32,7 +32,7 @@ func TimeFrom(src string) Time {
 
 func NewTime(date time.Time) Time {
 	return Time{
-		Date:  time.Date(0, 0, 0, date.Hour(), date.Minute(), date.Second(), date.Nanosecond(), time.UTC),
+		Date:  time.Date(0, 1, 1, date.Hour(), date.Minute(), date.Second(), date.Nanosecond(), time.UTC),
 		Valid: true,
 	}
 }
